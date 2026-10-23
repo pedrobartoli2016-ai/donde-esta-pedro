@@ -1,6 +1,71 @@
 
 const Phaser = window.Phaser;
 
+// ========================================
+// PANTALLA DE INICIO
+// ========================================
+
+class EscenaInicio extends Phaser.Scene {
+    constructor() {
+        super('EscenaInicio');
+    }
+
+    create() {
+        // FONDO OSCURO
+        this.add.rectangle(
+            640, 360, 1280, 720, 0x17171f
+        );
+
+        // TÍTULO
+        this.add.text(640, 245, '¿DÓNDE ESTÁ', {
+            fontFamily: 'Arial Black, Arial',
+            fontSize: '76px',
+            fontStyle: 'bold',
+            color: '#ffffff',
+            align: 'center'
+        }).setOrigin(0.5);
+
+        this.add.text(640, 340, 'PEDRO?', {
+            fontFamily: 'Arial Black, Arial',
+            fontSize: '100px',
+            fontStyle: 'bold',
+            color: '#ff5252',
+            align: 'center'
+        }).setOrigin(0.5);
+
+        // BOTÓN JUGAR
+        const botonJugar = this.add.rectangle(
+            640, 500, 260, 75, 0xb22222
+        )
+            .setInteractive({ useHandCursor: true });
+
+        this.add.text(640, 500, 'JUGAR', {
+            fontFamily: 'Arial',
+            fontSize: '32px',
+            fontStyle: 'bold',
+            color: '#ffffff'
+        }).setOrigin(0.5);
+
+        // EFECTO AL PASAR EL MOUSE
+        botonJugar.on('pointerover', () => {
+            botonJugar.setFillStyle(0xe03333);
+        });
+
+        botonJugar.on('pointerout', () => {
+            botonJugar.setFillStyle(0xb22222);
+        });
+
+        // ENTRAR AL JUEGO
+        botonJugar.on('pointerdown', () => {
+            this.scene.start('EscenaCuarto');
+        });
+    }
+}
+
+// ========================================
+// JUEGO PRINCIPAL
+// ========================================
+
 class EscenaCuarto extends Phaser.Scene {
     constructor() {
         super('EscenaCuarto');
@@ -408,7 +473,10 @@ class EscenaCuarto extends Phaser.Scene {
     }
 }
 
+// ========================================
 // CONFIGURACIÓN DEL JUEGO
+// ========================================
+
 const config = {
     type: Phaser.AUTO,
     width: 1280,
@@ -417,7 +485,7 @@ const config = {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: EscenaCuarto
+    scene: [EscenaInicio, EscenaCuarto]
 };
 
 new Phaser.Game(config);
